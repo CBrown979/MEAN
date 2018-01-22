@@ -107,3 +107,45 @@ var chat = new EventEmitter();
 chat.on('message',function(message){
   console.log(message);
 });
+
+//Emitting Events
+//Read the existing code below and modify it to emit events.
+//On the chat object, emit the 'join' event and pass in a custom message as a string.
+//Now emit the 'message' event on the chat object. Just like before, remember to pass in a custom message as a string.
+var events = require('events');
+var EventEmitter = events.EventEmitter;
+
+var chat = new EventEmitter();
+var users = [], chatlog = [];
+
+chat.on('message', function(message) {
+  chatlog.push(message);
+});
+
+chat.on('join', function(nickname) {
+  users.push(nickname);
+});
+
+// Emit events here
+chat.emit('join', 'Whaddup!');
+chat.emit('message', 'WhataGwan?!');
+
+
+//Request Event 
+//Just like you saw in the video, refactor the HTTP server code to explicitly bind a callback to the 'request' event 
+//using the on function.
+// Add an event listener on the server variable that listens to the request event. 
+// The event listener should take a callback function with two arguments, request and response.
+// Move the logic for handling the request from the http.createServer() callback to your new 'request' event listener. 
+//Remember to remove the http.createServer() callback once the code has been moved.
+//Remove the original request callback.
+
+var http = require('http');
+
+var server = http.createServer();
+server.on('request', function(request, response){
+  response.writeHead(200);
+  response.write("Hello, this is dog");
+  response.end();
+});
+server.listen(8080);
