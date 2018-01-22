@@ -98,6 +98,7 @@
 //Chat Emitter
 //We're going to create a custom chat EventEmitter.
 //Create a new EventEmitter object and assign it to a variable called 'chat'.
+//Use chat.on() to listen for the 'message' event, passing a callback function that accepts the message.
 //Next, let's listen for the 'message' event on our new chat object. Remember to add a callback that accepts the message parameter.
 //Log the message to the console using console.log().
 
@@ -149,3 +150,40 @@ server.on('request', function(request, response){
   response.end();
 });
 server.listen(8080);
+
+//Add a second 'request' handler to the HTTP server.
+//From inside of the new handler, log the message "New request coming in..." using console.log().
+var http = require('http');
+var server = http.createServer();
+server.on('request', function(request, response) {
+  response.writeHead(200);
+  response.write("Hello, this is dog");
+  response.end();
+});
+  server.on('request', function(request, response){
+    console.log("New request coming in...");
+  });
+server.listen(8080);
+
+//Listening for Close
+//Like our parents always used to say, listening is more important than talking! 
+//Modify the server so that we know when it's closed down.
+//Listen for the 'close' event on the server. The event listener should take a callback function that accepts no arguments.
+//Inside the 'close' callback, log the message "Closing down the server...".
+var http = require('http');
+var server = http.createServer();
+
+server.on('request', function(request, response) {
+  response.writeHead(200);
+  response.write("Hello, this is dog");
+  response.end();
+});
+
+server.on('request', function(request, response) {
+  console.log("New request coming in...");
+});
+server.on('close', function(){
+  console.log("Closing down the server...");
+});
+server.listen(8080);
+// http://campus.codeschool.com/courses/real-time-web-with-node-js/
