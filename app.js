@@ -187,3 +187,59 @@ server.on('close', function(){
 });
 server.listen(8080);
 // http://campus.codeschool.com/courses/real-time-web-with-node-js/
+
+//File Read Stream
+//Lets use the fs module to read a file and log its contents to the console.
+//Use the fs module to create a Readable stream for fruits.txt. Store the new stream in a variable called file.
+//Next, listen to the readable event on the newly created stream and give it a callback.
+//Inside the callback, read the data chunks from the stream and print them to the console using console.log() - you might want 
+//to use a while loop to do this. Don't forget to call toString() on the data before printing it.
+var fs = require('fs');
+var file = fs.createReadStream('fruits.txt');
+file.on('readable', function(){
+  var chunk;
+  while(null !== (chunk = file.read())){
+    console.log(chunk.toString());
+  }
+});
+
+//Fixing Pipe
+//The following code will throw an error because pipe automatically closed our writable stream.
+//You'll need to consult the pipe documentation to figure out the option which keeps the Write stream open and dispatches the end event.
+
+var fs = require('fs');
+var file = fs.createReadStream('origin.txt');
+var destFile = fs.createWriteStream('destination.txt');
+
+file.pipe(destFile, {end: false}); //updated answer
+// old answer file.pipe(destFile);
+
+file.on('end', function(){
+  destFile.end('Finished!');
+});
+
+
+
+//File Piping
+//Instead of manually listening for the 'readable' event on the Readable stream, 
+//let's use pipe to read from the stream and write directly to process.stdout.
+//Start by removing the code for the readable handler.
+var fs = require('fs');
+var file = fs.createReadStream('fruits.txt');
+file.pipe(process.stdout);
+
+//Download Server
+//Let's create an HTTP server that will serve index.html.
+//Use pipe() to send index.html to the response.
+var fs = require('fs');
+var http = require('http');
+
+http.createServer(function(request, response) {
+  response.writeHead(200, {'Content-Type': 'text/html'});
+
+  var file = fs.createReadStream('index.html');
+  file.pipe(response);
+}).listen(8080);
+
+
+
